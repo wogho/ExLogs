@@ -41,6 +41,12 @@ pip install -r requirements.txt
 </br>
 And Congrats 🎉 the Application would start if you have followed each step correctly.
 
+# Todo Update
+
+- [ ] Displays decompression progress
+- [ ] txt file classification function
+- [ ] Log list showing recently unzipped file name and date/time
+
 # License
 
 Distributed under the Apache License 2.0. See [`LICENSE.txt`](/LICENSE) for more information.
