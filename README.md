@@ -15,3 +15,9 @@ if all the above prequisities are Satisfied, you may proceedto the next section.
 
 ## Installation
 Follow these instructions to Setup your Own instance of the App :
+
+</br>
+
+
+### 1 : Clone the Repo 
+Find instructions for [cloning/downloading this repo here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository), then unzip the repository
