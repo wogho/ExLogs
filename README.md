@@ -40,3 +40,7 @@ pip install -r requirements.txt
 ```
 </br>
 And Congrats 🎉 the Application would start if you have followed each step correctly.
+
+# License
+
+Distributed under the Apache License 2.0. See [`LICENSE.txt`](/LICENSE) for more information.
