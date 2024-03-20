@@ -29,7 +29,8 @@ cd Exlogs
 ```
 ### 3 : Install the PIP packages/dependencies
 ```bash
-pip install -r requirements.txt
+pip3 install -r ttkbootstrap
+
 ```
 
 </br>
