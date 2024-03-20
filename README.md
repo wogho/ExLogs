@@ -20,4 +20,23 @@ Follow these instructions to Setup your Own instance of the App :
 
 
 ### 1 : Clone the Repo 
-Find instructions for [cloning/downloading this repo here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository), then unzip the repository
+```bash
+git clone https://github.com/wogho/Exlogs.git
+```
+### 2 : Cd to the folder
+```bash
+cd Exlogs
+```
+### 3 : Install the PIP packages/dependencies
+```bash
+pip install -r requirements.txt
+```
+
+</br>
+
+### 4 : It's done 🎉 | Run the app
+```bash
+  python3 "gui.py"
+```
+</br>
+And Congrats 🎉 the Application would start if you have followed each step correctly.
