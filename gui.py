@@ -46,6 +46,8 @@ def extract_files():
         print("압축 파일을 선택하세요.")
         return
     
+    completed_count = 0  # 완료된 작업 수를 저장하는 변수
+    
     for file in os.listdir('.'):
         if rar_selected or all_selected and (file.endswith('.rar') or file.endswith('.RAR')):
             selected_keywords = keyword_listbox.curselection()
@@ -57,7 +59,7 @@ def extract_files():
                 current_process = subprocess.Popen(rar_command, shell=True)
                 current_process.communicate()  # 프로세스가 완료될 때까지 대기
                 print(f"{file} 압축 해제 완료")
-                messagebox.showinfo('압축 해제 완료', '압축 해제가 완료되었습니다.')
+                completed_count += 1
             except subprocess.CalledProcessError as e:
                 print(f"{file} 압축 해제 중 오류 발생:", e)
         if zip_selected or all_selected and (file.endswith('.zip') or file.endswith('.ZIP')):
@@ -70,9 +72,13 @@ def extract_files():
                 current_process = subprocess.Popen(zip_command, shell=True)
                 current_process.communicate()  # 프로세스가 완료될 때까지 대기
                 print(f"{file} 압축 해제 완료")
-                messagebox.showinfo('압축 해제 완료', '압축 해제가 완료되었습니다.')
+                completed_count += 1
             except subprocess.CalledProcessError as e:
                 print(f"{file} 압축 해제 중 오류 발생:", e)
+
+    if completed_count > 0:
+        messagebox.showinfo('압축 해제 완료', f'모든 압축 해제가 완료되었습니다. ({completed_count}개의 파일)')
+
 
 def cancel_extraction():
     global current_process
