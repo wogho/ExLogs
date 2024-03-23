@@ -37,7 +37,7 @@ pip3 install -r ttkbootstrap
 
 ### 4 : It's done 🎉 | Run the app
 ```bash
-  python3 "gui.py"
+  python3 gui.py
 ```
 </br>
 And Congrats 🎉 the Application would start if you have followed each step correctly.
