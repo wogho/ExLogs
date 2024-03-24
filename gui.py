@@ -5,6 +5,8 @@ import shutil
 import logging
 import pathlib
 import queue
+import json
+import sys
 import tkinter as tk
 import ttkbootstrap as ttk
 import tkinter.messagebox as messagebox
@@ -22,6 +24,12 @@ from tkinter.scrolledtext import ScrolledText
 
 current_process = None  # 현재 실행 중인 프로세스를 추적하기 위한 변수
 DEFAULT_KEYWORDS = ["KR*", "[KR]*", "*[KR]*"]
+
+
+
+default_sites = ['oracle', 'alba', 'saram', 'face', 'insta', 'naver', 'afreeca', 'q-net', 'kakao', 'daum', 'a-bly', 'nexon', 'genshin', 'plaync']
+# site_listbox에서 선택된 사이트를 기록하는 변수
+selected_site = None
 
 def add_keyword():
     keyword = keyword_entry.get().strip()
@@ -134,6 +142,73 @@ def move_files_to_new_directory():
             print(f"{file_name}을(를) {new_directory_path}로 이동 완료")
         except Exception as e:
             print(f"{file_name} 이동 중 오류 발생:", e)
+##### tab2
+
+
+def add_site():
+    site_name = site_entry.get().strip()
+    if site_name:
+        site_listbox.insert(tk.END, site_name)
+        # site_listbox에 새로운 항목 추가한 후 선택
+        site_listbox.select_set(tk.END)
+        global selected_site
+        selected_site = site_name
+        site_entry.delete(0, tk.END)
+    
+# 분류 작업 수행
+def classify_data():
+    global selected_site
+    selected_indices = site_listbox.curselection()
+    if not selected_indices:
+        messagebox.showerror('Error', '사이트를 선택하세요.')
+        return
+
+    selected_sites = [site_listbox.get(idx) for idx in selected_indices]
+
+    # 사이트에 대한 데이터를 추출하여 저장하는 함수
+    def extract_data(site_names):
+        current_directory = os.path.dirname(__file__)  # 파이썬 파일이 위치한 디렉토리
+        for site_name in site_names:
+            # 사이트 파일 생성
+            file_path = os.path.join(current_directory, f'{site_name}.txt')
+            with open(file_path, 'w') as file:
+                file.write(f'Data for {site_name}:\n')
+                file.write('------------------------------\n')
+
+            passwords_files = find_passwords_files()  # Passwords.txt 또는 All Passwords.txt 파일 목록 찾기
+            for password_file in passwords_files:
+                process_password_file(password_file, site_name, file_path)  # 데이터 추출 및 저장
+
+    extract_data(selected_sites)
+    messagebox.showinfo('완료', '선택된 사이트에 대한 데이터가 저장되었습니다.')
+
+def find_passwords_files(starting_directory='.'):
+    passwords_files = []
+    for root, dirs, files in os.walk(starting_directory):
+        if 'Passwords.txt' in files:
+            passwords_files.append(os.path.join(root, 'Passwords.txt'))
+        if 'All Passwords.txt' in files:
+            passwords_files.append(os.path.join(root, 'All Passwords.txt'))
+    return passwords_files
+
+# Passwords.txt 또는 All Passwords.txt 파일에서 데이터 추출하여 해당 사이트 텍스트 파일에 저장
+def process_password_file(passwords_file_path, site_name, site_file_path):
+    with open(passwords_file_path, 'r', encoding='utf-8', errors='ignore') as f:
+        lines = f.readlines()
+        i = 0
+        while i < len(lines):
+            # (site_name)이 URL: 뒤에 포함 되어 있는 경우
+            if site_name in lines[i] and 'URL:' in lines[i]:
+                with open(site_file_path, 'a') as output:
+                    output.write(f"상위 디렉터리: {os.path.basename(os.path.dirname(passwords_file_path))}\n")
+                    block = []
+                    while i < len(lines) and not lines[i].startswith('==============='):
+                        block.append(lines[i])
+                        i += 1
+                    output.writelines(block + ['\n'])
+                    break
+            i += 1
+
 
 
 ##### tab3 
@@ -551,6 +626,24 @@ comfiles_label.pack(padx=1, pady=1)
 comfiles_button = ttk.Button(util_frame, text="Compose Files", command=move_files_to_new_directory, style='Primary.TButton')
 comfiles_button.pack(padx=10, pady=10)
 
+##### tab2
+# site_listbox를 추가하고 기본 사이트 목록으로 초기화
+site_listbox = tk.Listbox(tab2, selectmode=tk.MULTIPLE)
+for site in default_sites:
+    site_listbox.insert(tk.END, site)
+site_listbox.pack(padx=10, pady=10)
+
+# site_entry를 추가하여 새로운 사이트 추가
+site_entry = tk.Entry(tab2)
+site_entry.pack(pady=5)
+
+# site 추가 버튼
+site_add_button = tk.Button(tab2, text="Add Site", command=add_site)
+site_add_button.pack(pady=5)
+
+# 분류하기 버튼
+classify_button = tk.Button(tab2, text="분류하기", command=classify_data)
+classify_button.pack(pady=5)
 
 
 root.mainloop()
