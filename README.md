@@ -45,7 +45,7 @@ And Congrats 🎉 the Application would start if you have followed each step cor
 # Todo Update
 
 - [ ] Displays decompression progress
-- [ ] txt file classification "filter" function
+- [x] txt file classification "filter" function
 - [ ] Log list showing recently unzipped file name and date/time
 
 # License
