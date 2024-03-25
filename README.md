@@ -71,7 +71,7 @@ Overall, this application provides a variety of file management and data filteri
 
 # Todo Update
 
-- [ ] Displays decompression progress
+- [X] Displays decompression progress
 - [x] txt file classification "filter" function
 - [ ] Log list showing recently unzipped file name and date/time
 
