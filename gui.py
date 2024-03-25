@@ -23,11 +23,9 @@ from threading import Thread
 current_process = None  # 현재 실행 중인 프로세스를 추적하기 위한 변수
 DEFAULT_KEYWORDS = ["KR*", "[KR]*", "*[KR]*"]
 
-
-
+selected_site = None # site_listbox에서 선택된 사이트를 기록하는 변수
 default_sites = ['oracle', 'alba', 'saram', 'face', 'insta', 'naver', 'afreeca', 'q-net', 'kakao', 'daum', 'a-bly', 'nexon', 'genshin', 'plaync']
-# site_listbox에서 선택된 사이트를 기록하는 변수
-selected_site = None
+
 
 def add_keyword():
     keyword = keyword_entry.get().strip()
