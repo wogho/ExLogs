@@ -10,17 +10,15 @@ import sys
 import tkinter as tk
 import ttkbootstrap as ttk
 import tkinter.messagebox as messagebox
+from tkinter import *
+from tkinter.scrolledtext import ScrolledText
+from tkinter.filedialog import askdirectory, askopenfilename
+from ttkbootstrap.constants import *
+from ttkbootstrap import Style, utility
+from ttkbootstrap.widgets import Floodgauge
 from datetime import datetime
 from queue import Queue
 from threading import Thread
-from tkinter.filedialog import askdirectory
-from tkinter import *
-from ttkbootstrap.constants import *
-from ttkbootstrap import Style
-from ttkbootstrap import utility
-from ttkbootstrap.widgets import Floodgauge
-from tkinter.filedialog import askopenfilename
-from tkinter.scrolledtext import ScrolledText
 
 current_process = None  # 현재 실행 중인 프로세스를 추적하기 위한 변수
 DEFAULT_KEYWORDS = ["KR*", "[KR]*", "*[KR]*"]
@@ -48,26 +46,36 @@ def extract_files():
     rar_selected = rar_var.get()  # RAR 체크박스의 상태 확인
     zip_selected = zip_var.get()  # ZIP 체크박스의 상태 확인
     all_selected = all_var.get()  # All 체크박스의 상태 확인
-    
+
     # 모든 파일 형식이 선택되지 않은 경우
     if not rar_selected and not zip_selected and not all_selected:
         print("압축 파일을 선택하세요.")
         return
-    
+
     completed_count = 0  # 완료된 작업 수를 저장하는 변수
-    
+
+    total_files = sum(1 for file in os.listdir('.') if
+                      (rar_selected or all_selected) and (file.endswith('.rar') or file.endswith('.RAR')) or
+                      (zip_selected or all_selected) and (file.endswith('.zip') or file.endswith('.ZIP')))
+
+    progress_step = 100 / total_files  # 각 파일에 대한 진행 상황의 단계
+
+    # 프로그래스 바 업데이트
+    progressbar.start()
+
     for file in os.listdir('.'):
         if rar_selected or all_selected and (file.endswith('.rar') or file.endswith('.RAR')):
             selected_keywords = keyword_listbox.curselection()
             keywords = [keyword_listbox.get(idx) for idx in selected_keywords]
             # 사용자가 선택한 키워드를 적절한 형식으로 조합하여 압축 해제 명령어를 생성
             keyword_string = ' '.join([f"'{keyword}'" for keyword in keywords])
-            rar_command = f"mkdir '{file[:-4]}' && 7z x '{file}' -o'{file[:-4]}' -r {keyword_string}" #432code
+            rar_command = f"mkdir '{file[:-4]}' && 7z x '{file}' -o'{file[:-4]}' -r {keyword_string}"  # 432code
             try:
                 current_process = subprocess.Popen(rar_command, shell=True)
                 current_process.communicate()  # 프로세스가 완료될 때까지 대기
                 print(f"{file} 압축 해제 완료")
                 completed_count += 1
+                progressbar.step(progress_step)  # 프로그래스 바 업데이트
             except subprocess.CalledProcessError as e:
                 print(f"{file} 압축 해제 중 오류 발생:", e)
         if zip_selected or all_selected and (file.endswith('.zip') or file.endswith('.ZIP')):
@@ -81,11 +89,16 @@ def extract_files():
                 current_process.communicate()  # 프로세스가 완료될 때까지 대기
                 print(f"{file} 압축 해제 완료")
                 completed_count += 1
+                progressbar.step(progress_step)  # 프로그래스 바 업데이트
             except subprocess.CalledProcessError as e:
                 print(f"{file} 압축 해제 중 오류 발생:", e)
 
+    # 프로그래스 바 업데이트
+    progressbar.stop()
+
     if completed_count > 0:
         messagebox.showinfo('압축 해제 완료', f'모든 압축 해제가 완료되었습니다. ({completed_count}개의 파일)')
+
 
 
 def cancel_extraction():
@@ -626,24 +639,36 @@ comfiles_label.pack(padx=1, pady=1)
 comfiles_button = ttk.Button(util_frame, text="Compose Files", command=move_files_to_new_directory, style='Primary.TButton')
 comfiles_button.pack(padx=10, pady=10)
 
+# 프로그래스 바 추가
+progress_frame = Frame(extract_frame)
+progress_frame.pack(padx=10, pady=5, fill='both', expand=True)
+
+progressbar = ttk.Progressbar(progress_frame, mode='determinate', maximum=100, style='success.Striped.Horizontal.TProgressbar')
+progressbar.pack(fill='both', expand=True)
+
+
 ##### tab2
 # site_listbox를 추가하고 기본 사이트 목록으로 초기화
-site_listbox = tk.Listbox(tab2, selectmode=tk.MULTIPLE)
+
+filter_frame = LabelFrame(tab2, text='Utility')  # 탭1에 프레임 추가
+filter_frame.pack(padx=20, pady=10, fill='y')  # 프레임 외부여백
+
+site_listbox = tk.Listbox(filter_frame, selectmode=tk.MULTIPLE)
 for site in default_sites:
     site_listbox.insert(tk.END, site)
-site_listbox.pack(padx=10, pady=10)
+site_listbox.pack(padx=10, pady=50)
 
 # site_entry를 추가하여 새로운 사이트 추가
-site_entry = tk.Entry(tab2)
+site_entry = ttk.Entry(filter_frame)
 site_entry.pack(pady=5)
 
 # site 추가 버튼
-site_add_button = tk.Button(tab2, text="Add Site", command=add_site)
-site_add_button.pack(pady=5)
+site_add_button = ttk.Button(filter_frame, text="Add Site", command=add_site)
+site_add_button.pack(side=tk.LEFT, padx=10, pady=5)
 
 # 분류하기 버튼
-classify_button = tk.Button(tab2, text="분류하기", command=classify_data)
-classify_button.pack(pady=5)
+classify_button = ttk.Button(filter_frame, text="Classify", command=classify_data, style='Secondary.TButton')
+classify_button.pack(side=tk.LEFT, padx=10, pady=5)
 
 
 root.mainloop()
