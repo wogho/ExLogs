@@ -650,7 +650,7 @@ progressbar.pack(fill='both', expand=True)
 ##### tab2
 # site_listbox를 추가하고 기본 사이트 목록으로 초기화
 
-filter_frame = LabelFrame(tab2, text='Utility')  # 탭1에 프레임 추가
+filter_frame = LabelFrame(tab2, text='Filter')  # 탭1에 프레임 추가
 filter_frame.pack(padx=20, pady=10, fill='y')  # 프레임 외부여백
 
 site_listbox = tk.Listbox(filter_frame, selectmode=tk.MULTIPLE)
