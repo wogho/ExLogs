@@ -560,115 +560,88 @@ FileSearchEngine(tab3)
 TextReader(tab4)
 
 # 탭1 항목
+extract_frame = LabelFrame(tab1, text='Extract')
+extract_frame.pack(side=tk.LEFT, padx=20, pady=20, fill='both', expand=True)
 
-### extract 프레임 
-extract_frame = LabelFrame(tab1, text='Extract')  # 탭1에 프레임 추가
-extract_frame.pack(side=tk.LEFT, padx=20, pady=20, fill='both', expand=True)  # 프레임 외부여백
-
-extract_label = ttk.Label(extract_frame, text="Extract files (RAR, ZIP)", style='Warning.TLabel')
+# 압축 해제 관련 요소들 배치
+extract_label = ttk.Label(extract_frame, text="Extract Files (RAR, ZIP)", style='Warning.TLabel')
 extract_label.pack(padx=5, pady=10)
 
-# Keyword Listbox
 keyword_listbox = tk.Listbox(extract_frame, selectmode=tk.MULTIPLE)
 keyword_listbox.pack(pady=10)
-
 for keyword in DEFAULT_KEYWORDS:
     keyword_listbox.insert(tk.END, keyword)
 
-# Keyword Entry
 keyword_entry = ttk.Entry(extract_frame)
 keyword_entry.pack(pady=5)
 
 keyword_add_button = ttk.Button(extract_frame, text="Add Keyword", command=add_keyword)
 keyword_add_button.pack(pady=5)
 
-# 체크박스 한 줄에 배치
 check_buttons_frame = Frame(extract_frame)
 check_buttons_frame.pack(padx=10, pady=5)
-
 rar_var = IntVar()
 rar_checkbutton = ttk.Checkbutton(check_buttons_frame, text="RAR", variable=rar_var, style='Primary.TCheckbutton')
 rar_checkbutton.pack(side=tk.LEFT, padx=10, pady=5)
-
 zip_var = IntVar()
 zip_checkbutton = ttk.Checkbutton(check_buttons_frame, text="ZIP", variable=zip_var, style='Primary.TCheckbutton')
 zip_checkbutton.pack(side=tk.LEFT, padx=10, pady=5)
-
 all_var = IntVar()
 all_checkbutton = ttk.Checkbutton(check_buttons_frame, text="All", variable=all_var, style='Primary.TCheckbutton')
 all_checkbutton.pack(side=tk.LEFT, padx=10, pady=5)
 
-'''
-# Floodgauge 추가
-progress_frame = Frame(extract_frame)
-progress_frame.pack(padx=10, pady=5, fill='both', expand=True)
-
-floodgauge = Floodgauge(progress_frame, bootstyle=LIGHT, max=100, value=0)
-floodgauge.pack(fill='both', expand=True)
-'''
-
-# 압축 해제 및 취소 버튼
 buttons_frame = Frame(extract_frame)
 buttons_frame.pack(padx=10, pady=5)
-
 extract_button = ttk.Button(buttons_frame, text="Extract", command=extract_files, style='Primary.TButton')
 extract_button.pack(side=tk.LEFT, padx=10, pady=5)
-
 extract_cancel_button = ttk.Button(buttons_frame, text="Cancel", command=cancel_extraction, style='Secondary.TButton')
 extract_cancel_button.pack(side=tk.LEFT, padx=10, pady=5)
 
-### util 프레임 
-util_frame = LabelFrame(tab1, text='Utility')  # 탭1에 프레임 추가
-util_frame.pack(side=tk.RIGHT, padx=20, pady=10, fill='y')  # 프레임 외부여백
+# 유틸리티 관련 요소들 배치
+util_frame = LabelFrame(tab1, text='Utility')
+util_frame.pack(side=tk.RIGHT, padx=20, pady=20, fill='both', expand=True)
 
 delempty_label = ttk.Label(util_frame, text="*Delete Empty Folders", style='Warning.TLabel')
 delempty_label.pack(padx=1, pady=1)
-
 delempty_button = ttk.Button(util_frame, text="Delete Empty Folders", command=delete_empty_folders, style='Primary.TButton')
 delempty_button.pack(padx=10, pady=10)
 
 delextract_label = ttk.Label(util_frame, text="*Delete All RAR, ZIP Files", style='Warning.TLabel')
 delextract_label.pack(padx=1, pady=1)
-
 delextract_button = ttk.Button(util_frame, text="Delete Extract Files", command=delete_all_rar, style='Primary.TButton')
 delextract_button.pack(padx=10, pady=10)
 
 comfiles_label = ttk.Label(util_frame, text="*Move files to new directory (Date)", style='Warning.TLabel')
 comfiles_label.pack(padx=1, pady=1)
-
 comfiles_button = ttk.Button(util_frame, text="Compose Files", command=move_files_to_new_directory, style='Primary.TButton')
 comfiles_button.pack(padx=10, pady=10)
 
 # 프로그래스 바 추가
-progress_frame = Frame(extract_frame)
+progress_frame = Frame(tab1)
 progress_frame.pack(padx=10, pady=5, fill='both', expand=True)
-
 progressbar = ttk.Progressbar(progress_frame, mode='determinate', maximum=100, style='success.Striped.Horizontal.TProgressbar')
 progressbar.pack(fill='both', expand=True)
 
+# tab2
+filter_frame = LabelFrame(tab2, text='Filter')
+filter_frame.pack(padx=20, pady=20, fill='both', expand=True)
 
-##### tab2
-# site_listbox를 추가하고 기본 사이트 목록으로 초기화
+filter_label = ttk.Label(filter_frame, text="Filtering on Password.txt to Sites Keyword.", style='Warning.TLabel')
+filter_label.pack(padx=5, pady=10)
 
-filter_frame = LabelFrame(tab2, text='Filter')  # 탭1에 프레임 추가
-filter_frame.pack(padx=20, pady=10, fill='y')  # 프레임 외부여백
-
-site_listbox = tk.Listbox(filter_frame, selectmode=tk.MULTIPLE)
+site_listbox = tk.Listbox(filter_frame, selectmode=tk.MULTIPLE, width=30, height=10)
+site_listbox.pack(padx=10, pady=10)
 for site in default_sites:
     site_listbox.insert(tk.END, site)
-site_listbox.pack(padx=10, pady=50)
 
-# site_entry를 추가하여 새로운 사이트 추가
-site_entry = ttk.Entry(filter_frame)
+site_entry = ttk.Entry(filter_frame, width=30)
 site_entry.pack(pady=5)
 
-# site 추가 버튼
 site_add_button = ttk.Button(filter_frame, text="Add Site", command=add_site)
-site_add_button.pack(side=tk.LEFT, padx=10, pady=5)
+site_add_button.pack(pady=5)
 
-# 분류하기 버튼
 classify_button = ttk.Button(filter_frame, text="Classify", command=classify_data, style='Secondary.TButton')
-classify_button.pack(side=tk.LEFT, padx=10, pady=5)
+classify_button.pack(pady=5)
 
 
 root.mainloop()
