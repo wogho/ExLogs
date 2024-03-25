@@ -41,6 +41,33 @@ pip3 install -r ttkbootstrap
 ```
 </br>
 And Congrats 🎉 the Application would start if you have followed each step correctly.
+</br>
+
+# Info
+The code provided is a Python script that creates a GUI application using the Tkinter library. Here's a summary of what each tab does:
+### Setting Tab (tab1):
+
+Allows the user to extract files from RAR and ZIP archives based on selected keywords.
+Provides options to add keywords, select compression formats (RAR, ZIP, or both), and initiate the extraction process.
+Includes utility functions such as deleting empty folders, deleting all RAR and ZIP files, and moving files to a new directory based on the current date.
+
+### Filter Tab (tab2):
+
+Provides a list of default sites for filtering data.
+Allows users to add new sites to the list.
+Includes a button to classify data based on the selected sites. The data is extracted from password files (Passwords.txt or All Passwords.txt) and saved to separate text files for each site.
+
+### File Tab (tab3):
+
+Implements a file search engine that allows users to search for files within a specified directory based on search terms (contains, starts with, or ends with).
+Displays search results in a TreeView widget, showing file names, modification dates, types, sizes, and paths.
+
+### View Tab (tab4):
+
+Includes a text reader that allows users to browse and open text files.
+Displays the content of the selected text file in a ScrolledText widget.
+Overall, this application provides a variety of file management and data filtering functionalities through a user-friendly graphical interface.
+
 
 # Todo Update
 
