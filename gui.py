@@ -614,11 +614,6 @@ delextract_label.pack(padx=1, pady=1)
 delextract_button = ttk.Button(util_frame, text="Delete Extract Files", command=delete_all_rar, style='Primary.TButton')
 delextract_button.pack(padx=10, pady=10)
 
-comfiles_label = ttk.Label(util_frame, text="*Move files to new directory (Date)", style='Warning.TLabel')
-comfiles_label.pack(padx=1, pady=1)
-comfiles_button = ttk.Button(util_frame, text="Compose Files", command=move_files_to_new_directory, style='Primary.TButton')
-comfiles_button.pack(padx=10, pady=10)
-
 # 프로그래스 바 추가
 progress_frame = Frame(tab1)
 progress_frame.pack(padx=10, pady=5, fill='both', expand=True)
@@ -627,7 +622,7 @@ progressbar.pack(fill='both', expand=True)
 
 # tab2
 filter_frame = LabelFrame(tab2, text='Filter')
-filter_frame.pack(padx=20, pady=20, fill='both', expand=True)
+filter_frame.pack(side=tk.LEFT, padx=20, pady=20, fill='both', expand=True)
 
 filter_label = ttk.Label(filter_frame, text="Filtering on Password.txt to Sites Keyword.", style='Warning.TLabel')
 filter_label.pack(padx=5, pady=10)
@@ -650,5 +645,12 @@ select_all_button.pack(pady=5)
 classify_button = ttk.Button(filter_frame, text="Classify", command=classify_data, style='Secondary.TButton')
 classify_button.pack(pady=5)
 
+utiltab2_frame = LabelFrame(tab2, text='Utility')
+utiltab2_frame.pack(side=tk.RIGHT, padx=20, pady=20, fill='both', expand=True)
+
+comfiles_label = ttk.Label(utiltab2_frame, text="*Move files to new directory (Date)", style='Warning.TLabel')
+comfiles_label.pack(padx=1, pady=1)
+comfiles_button = ttk.Button(utiltab2_frame, text="Compose Files", command=move_files_to_new_directory, style='Primary.TButton')
+comfiles_button.pack(padx=10, pady=10)
 
 root.mainloop()
