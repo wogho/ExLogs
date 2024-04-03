@@ -11,6 +11,7 @@ import tkinter as tk
 import ttkbootstrap as ttk
 import tkinter.messagebox as messagebox
 from tkinter import *
+from tkinter import filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.filedialog import askdirectory, askopenfilename
 from ttkbootstrap.constants import *
@@ -165,6 +166,9 @@ def add_site():
         global selected_site
         selected_site = site_name
         site_entry.delete(0, tk.END)
+
+def select_all_sites():
+    site_listbox.select_set(0, tk.END)
     
 # 분류 작업 수행
 def classify_data():
@@ -175,6 +179,7 @@ def classify_data():
         return
 
     selected_sites = [site_listbox.get(idx) for idx in selected_indices]
+    
 
     # 사이트에 대한 데이터를 추출하여 저장하는 함수
     def extract_data(site_names):
@@ -637,6 +642,10 @@ site_entry.pack(pady=5)
 
 site_add_button = ttk.Button(filter_frame, text="Add Site", command=add_site)
 site_add_button.pack(pady=5)
+
+
+select_all_button = ttk.Button(filter_frame, text="Select All", command=select_all_sites)
+select_all_button.pack(pady=5)
 
 classify_button = ttk.Button(filter_frame, text="Classify", command=classify_data, style='Secondary.TButton')
 classify_button.pack(pady=5)
