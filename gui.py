@@ -25,7 +25,7 @@ current_process = None  # 현재 실행 중인 프로세스를 추적하기 위�
 DEFAULT_KEYWORDS = ["KR*", "[KR]*", "*[KR]*"]
 
 selected_site = None # site_listbox에서 선택된 사이트를 기록하는 변수
-default_sites = ['oracle', 'alba', 'saram', 'face', 'insta', 'naver', 'afreeca', 'q-net', 'kakao', 'daum', 'a-bly', 'nexon', 'genshin', 'plaync']
+default_sites = ['oracle', 'alba', 'saram', 'face', 'insta', 'naver', 'afreeca', 'q-net', 'kakao', 'daum', 'a-bly', 'nexon', 'genshin', 'plaync', 'hankotrade', 'zfx', 'zfxasia', 'exness', 'okx', 'upbit', 'bithumb', 'coinone']
 
 
 def add_keyword():
@@ -143,7 +143,7 @@ def move_files_to_new_directory():
 
     # Move all files (except .py files and the assets directory) to the new directory
     for file_name in os.listdir('.'):
-        if file_name.endswith('.py') or file_name.endswith('.ipynb_checkpoints') or file_name == 'assets':
+        if file_name.endswith('.py') or file_name.endswith('.ipynb_checkpoints') or file_name == 'assets' or file_name == 'sites.txt':
             continue
 
         source_path = os.path.join('.', file_name)
@@ -156,7 +156,7 @@ def move_files_to_new_directory():
             print(f"{file_name} 이동 중 오류 발생:", e)
 ##### tab2
 
-
+'''
 def add_site():
     site_name = site_entry.get().strip()
     if site_name:
@@ -166,6 +166,26 @@ def add_site():
         global selected_site
         selected_site = site_name
         site_entry.delete(0, tk.END)
+'''
+def add_site():
+    site_name = site_entry.get().strip()
+    if site_name:
+        site_listbox.insert(tk.END, site_name)
+        save_sites()  # 추가된 사이트를 파일에 저장
+        site_entry.delete(0, tk.END)
+
+def save_sites():
+    with open('sites.txt', 'w') as f:
+        for site in site_listbox.get(0, tk.END):
+            f.write(site + '\n')
+
+def load_sites():
+    try:
+        with open('sites.txt', 'r') as f:
+            for line in f:
+                site_listbox.insert(tk.END, line.strip())
+    except FileNotFoundError:
+        pass  # 파일이 없을 경우 무시
 
 def select_all_sites():
     site_listbox.select_set(0, tk.END)
@@ -652,5 +672,7 @@ comfiles_label = ttk.Label(utiltab2_frame, text="*Move files to new directory (D
 comfiles_label.pack(padx=1, pady=1)
 comfiles_button = ttk.Button(utiltab2_frame, text="Compose Files", command=move_files_to_new_directory, style='Primary.TButton')
 comfiles_button.pack(padx=10, pady=10)
+
+load_sites()
 
 root.mainloop()
