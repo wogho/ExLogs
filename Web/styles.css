@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#fileSelector {
+    margin-bottom: 20px;
+}
+
+#fileContent {
+    white-space: pre-line;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
